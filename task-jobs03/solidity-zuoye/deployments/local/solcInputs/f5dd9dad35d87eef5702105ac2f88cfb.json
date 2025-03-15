@@ -1,0 +1,36 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/test.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.28;\n\ncontract Test {\n    address private owner;\n    uint256 private MIN_VALUE = 1 * 10**18;\n    mapping (address => uint256) public userAmount;\n    event Log(address indexed, uint256 indexed);\n    event TestEvent(uint256, uint256);\n\n    constructor(address _owner) {\n        emit TestEvent(9, 67);\n        owner = _owner;\n    }\n\n    function collection() external payable{\n        require(msg.value >= MIN_VALUE, \"not transffer enough ETH\");\n        userAmount[msg.sender] = msg.value;\n    }\n\n    function getBalance() public view returns(uint256){\n        return userAmount[msg.sender];\n    }\n    function getContractBalance() public view returns(uint256){\n        return address(this).balance;\n    }\n\n    function getAmountToOwner() public {\n        require(msg.sender == owner, \"not owner\");\n        (bool success, ) = payable(msg.sender).call{value: address(this).balance}(\"\");\n        require(success, \"getAmount failed\");\n\n    }\n\n    function setOwner(address _owner) public {\n        require(msg.sender == owner, \"not owner\");\n        owner = _owner;\n    }\n    function getOwner() public returns(address){\n        emit Log(owner, address(this).balance);\n        return owner;\n    }\n}"
+    }
+  },
+  "settings": {
+    "evmVersion": "paris",
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}
