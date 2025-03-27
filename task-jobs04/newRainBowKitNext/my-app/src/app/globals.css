@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.headerWallet{
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.noBorderSelect {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 下拉箭头 */
+.customDropdown .ant-select-arrow {
+  margin-top: '20px'
+}
+
+.bold-select .ant-select-selection-item {
+  font-weight: bold !important;
+}
+  
