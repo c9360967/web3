@@ -5,9 +5,12 @@ import { tokens, ProxyContractAddr } from '../common/data'
 import { ABI_PROXY } from '../@abi/index'
 import { useEthersProvider, useEthersSigner } from '../@utils/ethers'
 import { ethers } from 'ethers'
-import { useAccount, useReadContract, useWatchContractEvent } from 'wagmi';
+import { useAccount, useReadContract, useWatchContractEvent, useWriteContract } from 'wagmi';
+import { formatBigInt, formatFloat } from '../@utils/formatBingInt'
+import { format } from 'path';
 
 export const UserInfo = () => {
+
     const [selectedToken, setSelectedToken] = useState(tokens[0]);
     const provider_write = useEthersSigner()
     const provider = useEthersProvider()
@@ -15,13 +18,24 @@ export const UserInfo = () => {
     const proxyContract = new ethers.Contract(ProxyContractAddr, ABI_PROXY, provider_write)
     const proxyContractRead = new ethers.Contract(ProxyContractAddr, ABI_PROXY, provider)
     console.log("pid", selectedToken.pid)
-    const data = useReadContract({
+    const userData = useReadContract({
         abi: ABI_PROXY,
         address: ProxyContractAddr,
-        functionName: 'getUserInfo',
-        // args: [selectedToken.pid]
-        args: [parseInt(selectedToken.pid)]
+        functionName: 'getUserInfoV2',
+        args: [selectedToken.pid],
+        // args: [parseInt(selectedToken.pid)],
+        account: address
     })
+    useWatchContractEvent({
+        address: ProxyContractAddr,
+        abi: ABI_PROXY,
+        eventName: 'UpdateReward',
+        onLogs(logs) {
+            console.log("UpdateReward", logs)
+        }
+    })
+
+    
     // useEffect(() => { 
     //     const fetchData = async () => {
     //         const data = await proxyContract.getUserInfo(selectedToken.pid)
@@ -30,22 +44,8 @@ export const UserInfo = () => {
     //     }
     //     fetchData()
     // }, [selectedToken])
-    // const data = 
 
-    console.log("111111111", data)
-    // console.log("22222222", BigInt(data.data?.stAmount))
-    // if (isConnected) {
-    //     console.log('1111111111111')
-        
-    // }
-    useWatchContractEvent({
-        address: ProxyContractAddr,
-        abi: ABI_PROXY,
-        eventName: 'PledgeRecord',
-        onLogs(logs) {
-            console.log("触发PledgeRecord事件", logs)
-        }
-    })
+    
     return (
         <div style={{
             display: 'flex',
@@ -55,9 +55,10 @@ export const UserInfo = () => {
             marginTop: '200px'
         }}>
             <Card
-                title="质押信息"
+                title={<span style={{fontSize: '20px',fontWeight: 'bold'}}>pledgeInformation</span>}
                 style={{ width: 500 }}
             >
+                
                 <Select
                     value={selectedToken.name}
                     onChange={(value) => {
@@ -71,13 +72,15 @@ export const UserInfo = () => {
                     {/* <Select.Option value="ETH">ETH</Select.Option> */}
                 </Select>
                 <Statistic
-                    title="质押数量"
-                    value={0}
+                    title="pledgeAmount"
+                    // value={formatBigInt(userData?.data.stAmount, 18)}
+                    value={userData.data?.stAmount} 
                     precision={2}
                 />
                 <Statistic
-                    title="已分配奖励"
-                    value={0}
+                    title="rewards"
+                    // value={formatBigInt(userData?.data.pendingRewards, 18)}
+                    value={parseInt(userData.data?.pendingReward)/10**18} 
                     precision={2}
                     style={{ marginTop: '20px' }}
                 />

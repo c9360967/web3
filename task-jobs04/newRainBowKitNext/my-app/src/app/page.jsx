@@ -8,7 +8,7 @@ export default function Home() {
     <>
 
       <StakePage></StakePage>
-      {/* <UserInfo /> */}
+      <UserInfo />
 
     </>
   )

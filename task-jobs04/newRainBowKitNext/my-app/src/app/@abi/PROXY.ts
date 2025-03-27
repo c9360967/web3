@@ -394,6 +394,25 @@ export const PROXY_abi = [
         "type": "event"
     },
     {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "pid",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "stAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "UserInfoEvent",
+        "type": "event"
+    },
+    {
         "inputs": [],
         "name": "DEFAULT_ADMIN_ROLE",
         "outputs": [
@@ -561,7 +580,7 @@ export const PROXY_abi = [
                         "type": "uint256"
                     }
                 ],
-                "internalType": "struct Feature.PoolInfo",
+                "internalType": "struct FeatureV2.PoolInfo",
                 "name": "",
                 "type": "tuple"
             }
@@ -609,7 +628,26 @@ export const PROXY_abi = [
                 "type": "uint256"
             }
         ],
-        "name": "getUserInfo",
+        "name": "getStAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_pid",
+                "type": "uint256"
+            }
+        ],
+        "name": "getUserInfoV2",
         "outputs": [
             {
                 "components": [
@@ -673,6 +711,37 @@ export const PROXY_abi = [
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "getStartAndEndBlock",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getRCCPerBlock",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "bytes32",
@@ -712,34 +781,6 @@ export const PROXY_abi = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_RCCTokenAddresss",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_startBlock",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_endBlock",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_RCCPerBlock",
-                "type": "uint256"
-            }
-        ],
-        "name": "initialize",
-        "outputs": [],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -1133,6 +1174,13 @@ export const PROXY_abi = [
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "v2initialize",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {

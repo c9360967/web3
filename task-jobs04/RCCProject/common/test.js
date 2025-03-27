@@ -1,11 +1,11 @@
 
 const {ethers} = require("ethers");
-const wallet_privateKey = "0x1ccec80afd93f913e59cb1df9391da75bc51d82f1686eb2f92c8713cca8c7dc4"
+const wallet_privateKey = "0x99a408b95eb4fd53db6d9dff0d25bf7afdc704db444d91045b4a78148886beed"
 const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545")
 const ETHArgs = {address:"0x0000000000000000000000000000000000000000", weight:4, sy:"ETH", min:1, lockBlock:200}
-const NTArgs = { address: "0xD047244b638bEA1b3815d73038f4873Ca2647eDE", weight: 3, sy: "NT", min: 10, lockBlock:200}
+const NTArgs = { address: "0x5FdfDA37473DF53075085134d7AD5EC25De372aE", weight: 3, sy: "NT", min: 10, lockBlock:200}
 // const MTArgs = ["0x3A1a118b7440E9fa178Bd63F9BfD3c9cecb61030", 2, "MT", 10, 200]
-const MTArgs = { address: "0x6af93f5808cf4a1c3df1ff23dfD484E21dF3E665", weight: 3, sy: "MT", min: 10, lockBlock: 200 }
+const MTArgs = { address: "0x2C52A78218E0C8f9EC59e72bfC6E13ca42B7A72C", weight: 3, sy: "MT", min: 10, lockBlock: 200 }
 const abi = [
     "function mintToken(uint256 _amount) external payable",
     "function balanceOf(address account) public view returns (uint256)",
@@ -18,7 +18,7 @@ const abi = [
     'function getStAmount(uint256 _pid) public view returns(uint256)'
     
 ]
-const contractAddress = "0x321704423c8BD802ec1B351e1BB26983497B4783"
+const contractAddress = "0x94A5f94b3777c1feB95176d7C4f7BCdeaEA1b1F0"
 const wallet = new ethers.Wallet(wallet_privateKey, provider)
 const featureV2 = new ethers.Contract(contractAddress, abi, wallet)
 const main = async () => {
@@ -26,7 +26,7 @@ const main = async () => {
     console.log(a)
 
 }
-main()
+// main()
 const addpool = async (args) => {
     let a = await featureV2.addPool(args.address, args.weight, args.sy, args.min, args.lockBlock)
     console.log(wallet.address)

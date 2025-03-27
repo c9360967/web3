@@ -13,7 +13,7 @@ module.exports = {
       url: "http://127.0.0.1:8545",
       // name: "ganache",
       // chainId: 1337,
-      accounts: ['0x1ccec80afd93f913e59cb1df9391da75bc51d82f1686eb2f92c8713cca8c7dc4', '0xb24900720bdea34cb6025fd45deba62e8144e6ecc9e0b9b91be85a59ae9fb9f2']
+      accounts: ['0x99a408b95eb4fd53db6d9dff0d25bf7afdc704db444d91045b4a78148886beed', '0xbf98cb28f685c9b83333546f87b2392292b5e61436713f3dfcd281e59600ec0f']
     },
     // hardhat: {
     //   websockets: true,

@@ -57,6 +57,7 @@ contract FeatureV2 is Initializable, UUPSUpgradeable, PausableUpgradeable, Acces
     event ClaimEvEnt(address userAddr, uint256 pid, uint256 amount, uint256 blockNumber);
     event AddPool(address userAddr, uint256 pid, address tokenAddr, uint256 blockNumber);
     event UpdateReward(uint256 increment, uint256 RCCPerBlockAmount, uint256 pid, uint256 blockLength);
+    event UserInfoEvent(uint256 pid, uint256 stAmount);
     // unShakeRequest[] requests;
 
     
@@ -166,7 +167,9 @@ contract FeatureV2 is Initializable, UUPSUpgradeable, PausableUpgradeable, Acces
     }
     function getPoolPerTokenToRewardsForBlock(uint256 _pid, uint256 _rewards) internal view returns(uint256){
         PoolInfo storage _pool = poolInfo[_pid];
-        uint256 rewardsIncrement = _pool.poolWeight / totalWeight * _rewards / _pool.allTokenNum;  
+        uint256 weightScale = (_pool.poolWeight * 1e18)/ totalWeight;
+        uint256 rewardsIncrement = weightScale * _rewards  / _pool.allTokenNum;
+        // uint256 rewardsIncrement = 100;   
         return rewardsIncrement;
         
     }
@@ -209,7 +212,7 @@ contract FeatureV2 is Initializable, UUPSUpgradeable, PausableUpgradeable, Acces
         uint256 _amount = msg.value;
 
         _pool.allTokenNum += _amount;
-        // updatePool(0);
+        updatePool(0);
         _user.stAmount += _amount;
         setPendingReward(msg.sender, 0);
         emit PledgeRecord(msg.sender, 0, msg.value, block.number, _user.stAmount);
@@ -225,12 +228,41 @@ contract FeatureV2 is Initializable, UUPSUpgradeable, PausableUpgradeable, Acces
         require(_amount <= IERC20(_pool.pledgeTokenAddress).balanceOf(msg.sender), "balance not enough");
         IERC20(_pool.pledgeTokenAddress).safeTransferFrom(msg.sender,address(this), _amount);
         _pool.allTokenNum += _amount;
+        updatePool(_pid);
         // userInfo[_pid][msg.sender].stAmount += _amount;
         _user.stAmount += _amount;
         setPendingReward(msg.sender, _pid);
         // emit PledgeRecord(msg.sender, _pid, _amount, block.number,_user.stAmount);
         emit PledgeRecord(msg.sender, _pid, _amount, block.number,userInfo[_pid][msg.sender].stAmount);
 
+    }
+     function getUserInfoV2(uint256 _pid) public returns(UserInfo memory) {
+        require(_pid < poolList.length, "getUserInfo: invalid pid");
+        updatePool(_pid);
+        UserInfo storage _user = userInfo[_pid][msg.sender];
+        // userInfo[_pid][msg.sender].stAmount
+        setPendingReward(msg.sender, _pid);
+    //     return UserInfo({
+    //         stAmount:_user.stAmount,
+    //         finishReward: _user.finishReward,
+    //         pendingReward:_user.pendingReward,
+    //         pledgeBlock:_user.pledgeBlock,
+    //         requests:_user.requests
+    // });
+        emit UserInfoEvent(_pid, _user.stAmount);
+        // emit PledgeRecord(msg.sender, _pid, 11111, block.number,_user.stAmount);
+
+        return _user;
+
+    }
+    function getStartAndEndBlock() public view returns(uint256, uint256){
+        return (startBlock, endBlock);
+    }
+
+
+
+    function getRCCPerBlock() public view returns(uint256){
+        return RCCPerBlock;
     }
 
     function getStAmount(uint256 _pid) public view returns(uint256){
@@ -242,7 +274,7 @@ contract FeatureV2 is Initializable, UUPSUpgradeable, PausableUpgradeable, Acces
         UserInfo storage _user = userInfo[_pid][_userAddress];
         PoolInfo storage _pool = poolInfo[_pid];
         if (_user.stAmount > 0){
-           uint256 _pendingReward  = _user.stAmount*_pool.tokenToRewardPerBlock;
+           uint256 _pendingReward  = _user.stAmount * _pool.tokenToRewardPerBlock;
            _user.pendingReward += _pendingReward;
            _user.finishReward += _pendingReward;
         }
@@ -363,22 +395,7 @@ contract FeatureV2 is Initializable, UUPSUpgradeable, PausableUpgradeable, Acces
 
     // }
 
-    function getUserInfo(uint256 _pid) public returns(UserInfo memory) {
-        require(_pid < poolList.length, "getUserInfo: invalid pid");
-        updatePool(_pid);
-        UserInfo storage _user = userInfo[_pid][msg.sender];
-        // userInfo[_pid][msg.sender].stAmount
-        setPendingReward(msg.sender, _pid);
-    //     return UserInfo({
-    //         stAmount:_user.stAmount,
-    //         finishReward: _user.finishReward,
-    //         pendingReward:_user.pendingReward,
-    //         pledgeBlock:_user.pledgeBlock,
-    //         requests:_user.requests
-    // });
-    return _user;
-
-    }
+   
 
 
 

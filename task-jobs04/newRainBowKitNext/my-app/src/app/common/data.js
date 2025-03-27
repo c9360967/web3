@@ -8,8 +8,8 @@ export const tokenAndAddress = [
 export const tokens = [
     { name: 'ETH', address: '',pid: 0 }, // ETH 没有合约地址
     // { name: 'RCC', address: '0x8dF4827C8B3a52e8F5F254550aAf0D21e237aB4A', abi: ABI_RCC, price: 0.01,pid:1 },
-    { name: 'NT', address: '0xD047244b638bEA1b3815d73038f4873Ca2647eDE', abi: ABI_NT, price: 0.01,pid: 1 },
-    { name: 'MT', address: '0x6af93f5808cf4a1c3df1ff23dfD484E21dF3E665', abi: ABI_MT ,price: 0.01,pid: 2}
+    { name: 'NT', address: '0x5FdfDA37473DF53075085134d7AD5EC25De372aE', abi: ABI_NT, price: 0.01,pid: 1 },
+    { name: 'MT', address: '0x2C52A78218E0C8f9EC59e72bfC6E13ca42B7A72C', abi: ABI_MT ,price: 0.01,pid: 2}
 ];
 
-export const ProxyContractAddr = "0x321704423c8BD802ec1B351e1BB26983497B4783"
+export const ProxyContractAddr = "0x94A5f94b3777c1feB95176d7C4f7BCdeaEA1b1F0"

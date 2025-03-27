@@ -29,22 +29,16 @@ export const StakePage = () => {
     // const TokenContract = new ethers.Contract(tokenMap.address, tokenMap.abi, provider_write)
 
     const handleStake = async() => {
-        if (amount <= 0){
+        if (amount <= 0 && isConnected){
             return;
         }
-        //授权
         
         if(selectedToken.name == "ETH"){
             const tx = await proxyContract.pledgeETH({ value: BigInt(amount * 10 ** 18) })
-            console.log("ETH质押", tx)
         }else{
             const ERC20TokenContract = new ethers.Contract(selectedToken.address, selectedToken.abi, provider_write)
             const erc20Tx = await ERC20TokenContract.approve(ProxyContractAddr,BigInt(amount * 10**18))
-            console.log("授权", erc20Tx)
-            console.log("pid", selectedToken.pid)
-            console.log("amount", BigInt(amount * 10 ** 18))
             const tx = await proxyContract.pledgeERC20(parseInt(amount), parseInt(selectedToken.pid))
-            console.log("ERC20质押", tx)
 
         }
 
@@ -53,7 +47,6 @@ export const StakePage = () => {
         // const ERC20TokenContract = new ethers.Contract(selectedToken.address, selectedToken.abi, provider_write)
         // console.log("代理合约地址", ProxyContractAddr)
         const tx = await proxyContract.getPoolSymbol(selectedToken.pid)
-        console.log("pool信息", tx)
     }
     const handleChange = (value) => {
         setSelectedToken(newTokens.filter(token => token.name == value)[0])
@@ -69,7 +62,7 @@ export const StakePage = () => {
                         type="text"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
-                        placeholder="输入质押数量"
+                        placeholder="Input pledge amount"
                         style={{ flex: 1, padding: '8px' }}
                         variant='borderless'
                     />
@@ -89,7 +82,7 @@ export const StakePage = () => {
                     onClick={handleStake}
                     style={{ width: '100%', padding: '10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', marginTop: "30px" }}
                 >
-                    确认质押
+                    OK
                 </button>
                 {/* <button onClick={verifySubmit}>9999999999</button> */}
                 {/* <button onClick={verifySubmit}>99999</button> */}

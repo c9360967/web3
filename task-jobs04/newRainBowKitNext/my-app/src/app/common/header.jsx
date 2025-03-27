@@ -5,6 +5,7 @@ import { Select, Space, Flex} from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
 import { CustomConnectButton } from './customConnectButton'
+import { usePathname } from 'next/navigation';
 
 export const Header = () =>{
     const {isConnected} = useAccount();
@@ -19,7 +20,8 @@ export const Header = () =>{
         return token
     })
     const [token, setToken] = useState(tokens[0].value)
-
+    const path = usePathname()
+    console.log("path", path)
 
     function handleChange(value) {
         setToken(value)
@@ -29,36 +31,14 @@ export const Header = () =>{
         <>
             <header>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '40px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>
                         <img src="/dex.png" alt="logo" style={{ width: '40px', height: '40px', marginRight: '20px',marginLeft: '200px' }} />
                         <nav style={{ display: 'flex', gap: '20px' }}>
-                            <Link href="/">质押</Link>
-                            <Link href="/exchange">兑换</Link>
-                            <Link href="/transactions">交易信息</Link>
+                            <Link href="/" className={path == "/"? 'text-[orangered]': ''}>PLEDGE</Link>
+                            <Link href="/exchange" className={path == "/exchange" ? 'text-[orangered]' : ''}>EXCHANGE</Link>
+                            {/* <Link href="/transactions">TransactionInformation</Link> */}
                         </nav>
                         </div>
-                    {/* <Menu
-                        mode="horizontal"
-                        defaultSelectedKeys={['stake']}
-                        items={[
-                            { key: 'stake', label: '质押' },
-                            { key: 'account', label: '账户信息' },
-                            { key: 'transactions', label: '交易记录' },
-                        ]}
-                    /> */}
-                    {/* <div style={{ marginRight: '20px' }}>
-                        {isConnected ? <Select
-                            value={token}
-                            variant='borderless'
-                            onChange={handleChange}
-                            options={tokens}
-                            optionRender={(token) => (
-                                <Space>
-                                    {token.data.label}
-                                </Space>
-                            )}
-                        /> : 1}
-                    </div> */}
                     
                     <div style={{marginRight: '200px'}}>
                         

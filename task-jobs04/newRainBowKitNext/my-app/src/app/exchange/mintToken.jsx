@@ -57,7 +57,7 @@ export const ERC20Exchange = () => {
             <Input
                 min={0}
                 type="number"
-                placeholder="输入ETH数量"
+                placeholder="input eth amount"
                 value={ethAmount}
                 onChange={(e) => {
 
@@ -93,8 +93,8 @@ export const ERC20Exchange = () => {
 
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                 {isConnected ? <Button type="primary" onClick={handleExchange} style={{ width: '20%', height: '39px', fontSize: '16px', fontWeight: 'bold', padding: '10px 16px', borderRadius: '10px' }}>
-                    确认兑换
-                </Button> : <ConnectButton showBalance={false} chainStatus="none" />}
+                    OK
+                </Button> : <ConnectButton label='collect wallet' showBalance={false} chainStatus="none" />}
 
             </div>
 
